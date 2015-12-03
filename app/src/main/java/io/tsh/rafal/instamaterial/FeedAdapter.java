@@ -11,12 +11,13 @@ import android.widget.ImageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener {
     private static final int ANIMATED_ITEMS_COUNT = 2;
 
     private Context context;
     private int lastAnimatedPosition = -1;
     private int itemsCount = 0;
+    private OnFeedItemClickListener onFeedItemClickListener;
 
     public FeedAdapter(Context context) {
         this.context = context;
@@ -55,6 +56,9 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             holder.ivFeedCenter.setImageResource(R.drawable.img_feed_center_2);
             holder.ivFeedBottom.setImageResource(R.drawable.img_feed_bottom_2);
         }
+
+        holder.ivFeedBottom.setOnClickListener(this);
+        holder.ivFeedBottom.setTag(position);
     }
 
     @Override
@@ -65,6 +69,21 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void updateItems() {
         itemsCount = 10;
         notifyDataSetChanged();
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.ivFeedBottom) {
+            if (onFeedItemClickListener != null)
+                onFeedItemClickListener.onCommentsClick(v, (int) v.getTag());
+        }
+    }
+
+    public interface OnFeedItemClickListener {
+        void onCommentsClick(View v, int position);
+    }
+    public void setOnFeedItemClickListener(OnFeedItemClickListener onFeedItemClickListener) {
+        this.onFeedItemClickListener = onFeedItemClickListener;
     }
 
     public static class CellFeedViewHolder extends RecyclerView.ViewHolder {
