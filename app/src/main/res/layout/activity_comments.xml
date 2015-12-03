@@ -10,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        android:elevation="0dp">
+        android:elevation="0dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <ImageView
             android:id="@+id/ivLogo"
@@ -18,7 +19,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:scaleType="center"
-            android:src="@drawable/img_toolbar_logo" />
+            android:src="@drawable/img_toolbar_logo"/>
     </android.support.v7.widget.Toolbar>
 
     <LinearLayout
@@ -35,25 +36,37 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:scrollbars="none" />
+            android:scrollbars="none"/>
 
         <LinearLayout
             android:id="@+id/llAddComment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/bg_comments"
-            android:elevation="@dimen/default_elevation">
+            android:elevation="@dimen/default_elevation"
+            android:gravity="center_vertical"
+            android:paddingBottom="4dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingTop="8dp">
 
             <EditText
+                android:id="@+id/etComment"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:textColor="#555555"
+                android:textSize="14sp"/>
 
-            <Button
+            <io.tsh.rafal.instamaterial.SendCommentButton
                 android:id="@+id/btnSendComment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Send" />
+                android:layout_width="72dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="2dp"
+                android:layout_marginLeft="8dp"
+                android:background="@drawable/btn_send_comment"
+                android:elevation="4dp"
+                android:orientation="vertical"/>
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

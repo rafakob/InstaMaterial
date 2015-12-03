@@ -51,7 +51,13 @@ public class MainActivity extends AppCompatActivity implements FeedAdapter.OnFee
     }
 
     private void setupFeed() {
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this){
+            @Override
+            protected int getExtraLayoutSpace(RecyclerView.State state) {
+                return 300;
+            }
+        };
+
         rvFeed.setLayoutManager(linearLayoutManager);
         feedAdapter = new FeedAdapter(this);
         feedAdapter.setOnFeedItemClickListener(this);
@@ -68,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements FeedAdapter.OnFee
         intent.putExtra(CommentsActivity.ARG_DRAWING_START_LOCATION,clickLocation[1]);
 
         startActivity(intent);
-        overridePendingTransition(0,0);
+        overridePendingTransition(0, 0);
     }
 
     @Override

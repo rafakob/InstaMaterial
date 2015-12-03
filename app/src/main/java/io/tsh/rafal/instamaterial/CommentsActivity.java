@@ -7,23 +7,28 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
-public class CommentsActivity extends AppCompatActivity {
+public class CommentsActivity extends AppCompatActivity implements SendCommentButton.OnSendClickListener{
     public static final String ARG_DRAWING_START_LOCATION = "arg_drawing_start_location";
     @Bind(R.id.toolbar) Toolbar toolbar;
     @Bind(R.id.contentRoot) LinearLayout contentRoot;
     @Bind(R.id.rvComments) RecyclerView rvComments;
     @Bind(R.id.llAddComment) LinearLayout llAddComment;
+    @Bind(R.id.btnSendComment) SendCommentButton btnSendComment;
+    @Bind(R.id.etComment) EditText etComment;
 
     private CommentsAdapter commentsAdapter;
     private int drawingStartLocation;
@@ -48,6 +53,8 @@ public class CommentsActivity extends AppCompatActivity {
         }
         setupToolbar();
         setupFeed();
+        btnSendComment.setOnSendClickListener(this);
+
     }
 
     private void setupToolbar() {
@@ -88,18 +95,23 @@ public class CommentsActivity extends AppCompatActivity {
                 .start();
     }
 
-    @OnClick(R.id.btnSendComment)
-    public void onSendCommentClick() {
-        commentsAdapter.addItem();
-        commentsAdapter.setAnimationsLocked(false);
-        commentsAdapter.setDelayEnterAnimation(false);
-        rvComments.smoothScrollBy(0, rvComments.getChildAt(0).getHeight() * commentsAdapter.getItemCount());
+    @Override
+    public void onSendClickListener(View v) {
+        if (validateComment()) {
+            commentsAdapter.addItem();
+            commentsAdapter.setAnimationsLocked(false);
+            commentsAdapter.setDelayEnterAnimation(false);
+            rvComments.smoothScrollBy(0, rvComments.getChildAt(0).getHeight() * commentsAdapter.getItemCount());
+
+//            etComment.setText(null);
+            btnSendComment.setCurrentState(SendCommentButton.STATE_DONE);
+        }
     }
 
     private void startIntroAnimation() {
         contentRoot.setScaleY(0.1f);
         contentRoot.setPivotY(drawingStartLocation);
-        llAddComment.setTranslationY(100);
+        llAddComment.setTranslationY(200);
 
         contentRoot.animate()
                 .scaleY(1)
@@ -126,6 +138,15 @@ public class CommentsActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         MenuItem inboxMenuItem = menu.findItem(R.id.action_inbox).setActionView(R.layout.menu_item_view);
+        return true;
+    }
+
+    private boolean validateComment() {
+        if (TextUtils.isEmpty(etComment.getText())) {
+            btnSendComment.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake_error));
+            return false;
+        }
+
         return true;
     }
 
