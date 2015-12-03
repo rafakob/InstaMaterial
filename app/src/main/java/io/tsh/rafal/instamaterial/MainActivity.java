@@ -2,6 +2,7 @@ package io.tsh.rafal.instamaterial;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -60,7 +61,14 @@ public class MainActivity extends AppCompatActivity implements FeedAdapter.OnFee
 
     @Override
     public void onCommentsClick(View v, int position) {
+        final Intent intent = new Intent(this,CommentsActivity.class);
 
+        int[] clickLocation = new int[2];
+        v.getLocationOnScreen(clickLocation);
+        intent.putExtra(CommentsActivity.ARG_DRAWING_START_LOCATION,clickLocation[1]);
+
+        startActivity(intent);
+        overridePendingTransition(0,0);
     }
 
     @Override

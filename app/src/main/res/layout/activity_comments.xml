@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        android:elevation="@dimen/default_elevation">
+        android:elevation="0dp">
 
         <ImageView
             android:id="@+id/ivLogo"
